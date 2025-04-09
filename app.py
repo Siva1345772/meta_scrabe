@@ -653,7 +653,7 @@ MAX_URLS_PER_REQUEST = 500  # Maximum URLs to process in a single request
 
 @app.route('/')
 def home():
-    return """
+    return f"""
     <!DOCTYPE html>
     <html>
     <head>
@@ -662,29 +662,29 @@ def home():
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="icon" type="image/jpg" href="static/site-icon.jpg" sizes="32x32" />
         <style>
-            .fade-in {
+            .fade-in {{
                 animation: fadeIn 0.3s ease-in-out;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .card-hover:hover {
+            }}
+            @keyframes fadeIn {{
+                from {{ opacity: 0; transform: translateY(10px); }}
+                to {{ opacity: 1; transform: translateY(0); }}
+            }}
+            .card-hover:hover {{
                 transform: translateY(-2px);
                 box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            }
-            .progress-container {
+            }}
+            .progress-container {{
                 width: 100%;
                 background-color: #e5e7eb;
                 border-radius: 0.5rem;
                 margin-bottom: 1rem;
-            }
-            .progress-bar {
+            }}
+            .progress-bar {{
                 height: 0.5rem;
                 background-color: #3b82f6;
                 border-radius: 0.5rem;
                 transition: width 0.3s ease;
-            }
+            }}
         </style>
     </head>
     <body class="bg-gray-50 min-h-screen">
@@ -702,7 +702,7 @@ def home():
             <div class="text-center mb-12">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">URL Meta Scraper</h1>
                 <p class="text-gray-600 max-w-lg mx-auto">Extract title and description metadata from multiple URLs at once</p>
-                <p class="text-sm text-gray-500 mt-2">Max {max_urls} URLs per request | {max_concurrent} concurrent requests</p>
+                <p class="text-sm text-gray-500 mt-2">Max {MAX_URLS_PER_REQUEST} URLs per request | {MAX_CONCURRENT_REQUESTS} concurrent requests</p>
             </div>
             
             <!-- Main Form -->
@@ -716,7 +716,7 @@ def home():
                             rows="8" 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                             placeholder="https://example.com&#10;https://another-example.com"></textarea>
-                        <p class="text-sm text-gray-500 mt-1">Enter one URL per line (max {max_urls} URLs)</p>
+                        <p class="text-sm text-gray-500 mt-1">Enter one URL per line (max {MAX_URLS_PER_REQUEST} URLs)</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <button 
@@ -762,40 +762,40 @@ def home():
             const progressContainer = document.getElementById('progressContainer');
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
-            const maxUrls = {max_urls};
+            const maxUrls = {MAX_URLS_PER_REQUEST};
             
-            document.getElementById('scraperForm').addEventListener('submit', async function(e) {
+            document.getElementById('scraperForm').addEventListener('submit', async function(e) {{
                 e.preventDefault();
                 
                 const urlsText = document.getElementById('urls').value.trim();
-                if (!urlsText) {
+                if (!urlsText) {{
                     alert('Please enter at least one URL');
                     return;
-                }
+                }}
                 
                 const urls = urlsText.split('\\n').filter(url => url.trim().startsWith('http'));
-                if (urls.length > maxUrls) {
-                    alert(`You entered ${urls.length} URLs. Maximum allowed is ${maxUrls}. Please reduce the number and try again.`);
+                if (urls.length > maxUrls) {{
+                    alert(`You entered ${{urls.length}} URLs. Maximum allowed is ${{maxUrls}}. Please reduce the number and try again.`);
                     return;
-                }
+                }}
                 
                 // Show loading indicator and progress
                 loadingIndicator.classList.remove('hidden');
                 progressContainer.classList.remove('hidden');
-                progressText.textContent = `Processing 0 of ${urls.length} URLs`;
+                progressText.textContent = `Processing 0 of ${{urls.length}} URLs`;
                 
                 const formData = new FormData(this);
                 
-                try {
-                    const response = await fetch('/scrape', {
+                try {{
+                    const response = await fetch('/scrape', {{
                         method: 'POST',
                         body: formData
-                    });
+                    }});
                     
-                    if (!response.ok) {
+                    if (!response.ok) {{
                         const error = await response.json();
                         throw new Error(error.error || 'Network response was not ok');
-                    }
+                    }}
                     
                     const data = await response.json();
                     currentData = data.results;
@@ -806,53 +806,53 @@ def home():
                     const resultsContainer = document.getElementById('results');
                     resultsContainer.innerHTML = '';
                     
-                    if (data.results.length === 0) {
+                    if (data.results.length === 0) {{
                         resultsContainer.innerHTML = `
                             <div class="bg-white rounded-xl shadow-md p-6 text-center text-gray-500">
                                 No results found. Please check your URLs and try again.
                             </div>
                         `;
                         return;
-                    }
+                    }}
                     
                     // Add each result as a card
-                    data.results.forEach((item, index) => {
+                    data.results.forEach((item, index) => {{
                         const card = document.createElement('div');
                         card.className = `bg-white rounded-xl shadow-md overflow-hidden card-hover transition-all duration-200 fade-in`;
-                        card.style.animationDelay = `${index * 50}ms`;
+                        card.style.animationDelay = `${{index * 50}}ms`;
                         
                         let titleColor = 'text-gray-800';
                         let titleIcon = 'fa-link';
-                        if (item.Title.includes('Error') || item.Title.includes('Failed')) {
+                        if (item.Title.includes('Error') || item.Title.includes('Failed')) {{
                             titleColor = 'text-red-600';
                             titleIcon = 'fa-exclamation-circle';
-                        }
+                        }}
                         
                         card.innerHTML = `
                             <div class="p-6">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center mb-2">
-                                            <i class="fas ${titleIcon} ${titleColor} mr-2"></i>
-                                            <h2 class="${titleColor} font-semibold text-lg truncate">${item.Title}</h2>
+                                            <i class="fas ${{titleIcon}} ${{titleColor}} mr-2"></i>
+                                            <h2 class="${{titleColor}} font-semibold text-lg truncate">${{item.Title}}</h2>
                                         </div>
-                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">${item.Description}</p>
-                                        <a href="${item.URL}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center">
+                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">${{item.Description}}</p>
+                                        <a href="${{item.URL}}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center">
                                             <i class="fas fa-external-link-alt mr-1"></i>
-                                            <span class="truncate max-w-xs inline-block">${item.URL}</span>
+                                            <span class="truncate max-w-xs inline-block">${{item.URL}}</span>
                                         </a>
                                     </div>
                                     <span class="ml-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        #${index + 1}
+                                        #${{index + 1}}
                                     </span>
                                 </div>
                             </div>
                         `;
                         
                         resultsContainer.appendChild(card);
-                    });
+                    }});
                     
-                } catch (error) {
+                }} catch (error) {{
                     console.error('Error:', error);
                     document.getElementById('results').innerHTML = `
                         <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
@@ -862,28 +862,28 @@ def home():
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-red-700">
-                                        ${error.message || 'An error occurred while scraping. Please try again.'}
+                                        ${{error.message || 'An error occurred while scraping. Please try again.'}}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     `;
-                } finally {
+                }} finally {{
                     loadingIndicator.classList.add('hidden');
                     progressContainer.classList.add('hidden');
-                }
-            });
+                }}
+            }});
             
             // Listen for progress updates from server
             const eventSource = new EventSource('/progress');
-            eventSource.onmessage = function(e) {
+            eventSource.onmessage = function(e) {{
                 const progress = JSON.parse(e.data);
                 const percent = Math.round((progress.completed / progress.total) * 100);
-                progressBar.style.width = `${percent}%`;
-                progressText.textContent = `Processing ${progress.completed} of ${progress.total} URLs`;
-            };
+                progressBar.style.width = `${{percent}}%`;
+                progressText.textContent = `Processing ${{progress.completed}} of ${{progress.total}} URLs`;
+            }};
             
-            document.getElementById('downloadBtn').addEventListener('click', function() {
+            document.getElementById('downloadBtn').addEventListener('click', function() {{
                 if (currentData.length === 0) return;
                 
                 // Convert data to CSV
@@ -892,14 +892,14 @@ def home():
                     headers.join(','),
                     ...currentData.map(row => 
                         headers.map(header => 
-                            `"${row[header].replace(/"/g, '""')}"`
+                            `"${{row[header].replace(/"/g, '""')}}"`
                         ).join(',')
                     )
                 ];
                 const csvContent = csvRows.join('\\n');
                 
                 // Create download link
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const blob = new Blob([csvContent], {{ type: 'text/csv;charset=utf-8;' }});
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.setAttribute('href', url);
@@ -908,14 +908,11 @@ def home():
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-            });
+            }});
         </script>
     </body>
     </html>
-    """.format(
-        max_urls=MAX_URLS_PER_REQUEST,
-        max_concurrent=MAX_CONCURRENT_REQUESTS
-    )
+    """
 
 @app.route('/developer')
 def developer():
