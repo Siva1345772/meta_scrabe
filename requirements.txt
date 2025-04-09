@@ -2,3 +2,4 @@ flask
 beautifulsoup4
 requests
 pandas
+gunicorn==21.2.0
